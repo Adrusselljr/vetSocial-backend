@@ -5,7 +5,7 @@ const { errorHandler } = require('../../validator/utils/errorHandler')
 
 // Create user
 const createUser = async (req, res) => {
-    const { firstName, lastName, username, email, password, address, branch } = req.body
+    const { firstName, lastName, username, email, password, address, branch, phoneNumber } = req.body
 
     try {
         let salt = await bcrypt.genSalt(10)
@@ -18,7 +18,8 @@ const createUser = async (req, res) => {
             email: email,
             branch: branch,
             password: hashPassword,
-            address: address
+            address: address,
+            phoneNumber: phoneNumber
         })
         const savedUser = await newUser.save()
         res.status(200).json({ message: "New user has been saved", payload: savedUser })
@@ -99,7 +100,7 @@ const userLogin = async (req, res) => {
     const { email, password } = req.body
 
     try {
-        const foundUser = await User.findOne({ email: email }).populate({ path: 'postHistory', populate: { path: 'postOwner' }}).populate({ path: 'postHistory', populate: { path: 'commentHistory', populate: { path: 'commentOwner' } }})
+        const foundUser = await User.findOne({ email: email}).populate({ path: 'postHistory', populate: { path: 'postOwner' }}).populate({ path: 'postHistory', populate: { path: 'commentHistory', populate: { path: 'commentOwner' } }})
         if(foundUser === null) throw { message: "Email not found!" }
         const comparedPassword = await bcrypt.compare(password, foundUser.password)
         if(!comparedPassword) throw { mesaage: "Password does not match!" }

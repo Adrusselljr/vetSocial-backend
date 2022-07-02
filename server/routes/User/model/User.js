@@ -44,6 +44,16 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
 
+    phoneNumber: {
+        type: String,
+        required: true
+    },
+
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
+
     friends: [{
         type: String
     }],
