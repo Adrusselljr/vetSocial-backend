@@ -5,7 +5,7 @@ const { errorHandler } = require('../../validator/utils/errorHandler')
 
 // Create user
 const createUser = async (req, res) => {
-    const { firstName, lastName, username, email, password, address, branch, phoneNumber } = req.body
+    const { firstName, lastName, username, email, password, address, branch, phoneNumber, profilePicture, coverPhoto } = req.body
 
     try {
         let salt = await bcrypt.genSalt(10)
@@ -19,7 +19,9 @@ const createUser = async (req, res) => {
             branch: branch,
             password: hashPassword,
             address: address,
-            phoneNumber: phoneNumber
+            phoneNumber: phoneNumber,
+            profilePicture: profilePicture,
+            coverPhoto: coverPhoto
         })
         const savedUser = await newUser.save()
         res.status(200).json({ message: "New user has been saved", payload: savedUser })
