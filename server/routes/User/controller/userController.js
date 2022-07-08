@@ -32,8 +32,25 @@ const createUser = async (req, res) => {
     }
 }
 
-//Update user
+// Update user
 const updateUser = async (req, res) => {
+    const decodedToken = res.locals.decodedToken
+    // const { id } = req.params
+
+    try {
+        const updateUser = await User.findOneAndUpdate({ _id: decodedToken._id }, req.body, { new: true })
+        // const updateUser = await User.findOneAndUpdate(id, req.body, { new: true })
+        if(updateUser === null) throw new Error("No user with id found!")
+        res.status(200).json({ message: "Updated user", payload: updateUser })
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).json({ error: errorHandler(err) })
+    }
+}
+
+// Update user password
+const updatePassword = async (req, res) => {
     const decodedToken = res.locals.decodedToken
     // const { id } = req.params
     let { password } = req.body
@@ -130,5 +147,6 @@ module.exports = {
     getCurrentUser,
     getAllUsers,
     deleteUser,
-    userLogin
+    userLogin,
+    updatePassword
 } 
