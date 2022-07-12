@@ -35,11 +35,9 @@ const createUser = async (req, res) => {
 // Update user
 const updateUser = async (req, res) => {
     const decodedToken = res.locals.decodedToken
-    // const { id } = req.params
 
     try {
         const updateUser = await User.findOneAndUpdate({ _id: decodedToken._id }, req.body, { new: true })
-        // const updateUser = await User.findOneAndUpdate(id, req.body, { new: true })
         if(updateUser === null) throw new Error("No user with id found!")
         res.status(200).json({ message: "Updated user", payload: updateUser })
     }
@@ -52,7 +50,6 @@ const updateUser = async (req, res) => {
 // Update user password
 const updatePassword = async (req, res) => {
     const decodedToken = res.locals.decodedToken
-    // const { id } = req.params
     let { password } = req.body
 
     try {
@@ -61,7 +58,6 @@ const updatePassword = async (req, res) => {
         password = hashPassword
 
         const updateUser = await User.findOneAndUpdate({ _id: decodedToken._id }, req.body, { new: true })
-        // const updateUser = await User.findOneAndUpdate(id, req.body, { new: true })
         if(updateUser === null) throw new Error("No user with id found!")
         res.status(200).json({ message: "Updated user", payload: updateUser })
     }
@@ -74,11 +70,9 @@ const updatePassword = async (req, res) => {
 // Get current user
 const getCurrentUser = async (req, res) => {
     const decodedToken = res.locals.decodedToken
-    // const { id } = req.params
 
     try {
         const foundUser = await User.findOne({ _id: decodedToken._id })
-        // const foundUser = await User.findById(id)
         res.status(200).json({ message: "Current user", payload: foundUser })
     }
     catch (err) {
@@ -133,7 +127,6 @@ const userLogin = async (req, res) => {
         )
 
         res.status(200).json({ message: "User is logged in",  payload: foundUser, token: jwtToken })
-        // res.status(200).json({ message: "User is logged in",  payload: foundUser })
     }
     catch (err) {
         console.log(err)
