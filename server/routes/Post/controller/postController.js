@@ -5,12 +5,10 @@ const Comment = require('../../Comment/model/Comment')
 // Create post
 const createPost = async (req, res) => {
     const decodedToken = res.locals.decodedToken
-    // const { id } = req.params
     const { post } = req.body
 
     try {
-        const foundUser = await User.findOne({ _id: decodedToken._id });
-        // const foundUser = await User.findById(id)
+        const foundUser = await User.findOne({ _id: decodedToken._id })
         if(!foundUser) throw { message: "User not found!" }
 
         const newPost = new Post({
@@ -62,7 +60,7 @@ const updatePost = async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        res.status(500).json({ message: "error", error: err })
+        res.status(500).json({ message: "error", error: err.message })
     }
 }
 

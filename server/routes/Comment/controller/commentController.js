@@ -70,7 +70,7 @@ const updateComment = async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        res.status(500).json({ message: "error", error: err })
+        res.status(500).json({ message: "error", error: err.message })
     }
 }
 
@@ -102,7 +102,7 @@ const deleteComment = async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        res.status(500).json({ message: "error", error: err })
+        res.status(500).json({ message: "error", error: err.message })
     }
 }
 

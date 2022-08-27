@@ -38,7 +38,7 @@ const updateUser = async (req, res) => {
 
     try {
         const updateUser = await User.findOneAndUpdate({ _id: decodedToken._id }, req.body, { new: true })
-        if(updateUser === null) throw new Error("No user with id found!")
+        if(!updateUser) throw new Error("No user with id found!")
         res.status(200).json({ message: "Updated user", payload: updateUser })
     }
     catch (err) {
@@ -58,7 +58,7 @@ const updatePassword = async (req, res) => {
         password = hashPassword
 
         const updateUser = await User.findOneAndUpdate({ _id: decodedToken._id }, req.body, { new: true })
-        if(updateUser === null) throw new Error("No user with id found!")
+        if(!updateUser) throw new Error("No user with id found!")
         res.status(200).json({ message: "Updated user", payload: updateUser })
     }
     catch (err) {
@@ -73,11 +73,12 @@ const getCurrentUser = async (req, res) => {
 
     try {
         const foundUser = await User.findOne({ _id: decodedToken._id })
+        if(!foundUser) throw { message: "No user with id found!" }
         res.status(200).json({ message: "Current user", payload: foundUser })
     }
     catch (err) {
         console.log(err)
-        res.status(500).json({ message: "error", error: err })
+        res.status(500).json({ message: "error", error: err.message })
     }
 }
 
@@ -89,7 +90,7 @@ const getAllUsers = async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        res.status(500).json({ message: "error", error: err })
+        res.status(500).json({ message: "error", error: err.mesaage })
     }
 }
 
@@ -99,12 +100,12 @@ const deleteUser = async (req, res) => {
 
     try {
         let deletedUser = await User.findByIdAndDelete(id)
-        if(deletedUser === null) throw new Error("No user with id found!")
+        if(!deletedUser) throw { message: "No user with id found!" }
         res.status(200).json({ message: "User has been deleted", payload: deletedUser })
     }
     catch (err) {
         console.log(err)
-        res.status(500).json({ message: "error", error: err })
+        res.status(500).json({ message: "error", error: err.message })
     }
 }
 
@@ -114,7 +115,7 @@ const userLogin = async (req, res) => {
 
     try {
         const foundUser = await User.findOne({ email: email}).populate({ path: 'postHistory', populate: { path: 'postOwner' }}).populate({ path: 'postHistory', populate: { path: 'commentHistory', populate: { path: 'commentOwner' } }})
-        if(foundUser === null) throw { message: "Email not found!" }
+        if(!foundUser) throw { message: "Email not found!" }
         const comparedPassword = await bcrypt.compare(password, foundUser.password)
         if(!comparedPassword) throw { mesaage: "Password does not match!" }
 
