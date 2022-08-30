@@ -50,12 +50,11 @@ const updateUser = async (req, res) => {
 // Update user password
 const updatePassword = async (req, res) => {
     const decodedToken = res.locals.decodedToken
-    let { password } = req.body
 
     try {
         const salt = await bcrypt.genSalt(10)
-        const hashPassword = await bcrypt.hash(password, salt)
-        password = hashPassword
+        const hashPassword = await bcrypt.hash(req.body.password, salt)
+        req.body.password = hashPassword
 
         const updateUser = await User.findOneAndUpdate({ _id: decodedToken._id }, req.body, { new: true })
         if(!updateUser) throw new Error("No user with id found!")
