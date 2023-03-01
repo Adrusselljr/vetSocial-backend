@@ -77,7 +77,7 @@ const deletePost = async (req, res) => {
 
         if(foundUser._id.toString() === foundPost.postOwner._id.toString()) {
             const deletedPost = await Post.findByIdAndDelete(id)
-            if(!deletePost) throw { message: "Post not found!" }
+            if(!deletedPost) throw { message: "Post not found!" }
 
             if(foundPost.commentHistory.length > 0) {
                 const foundComments = await Comment.find({ post: id })
